@@ -122,6 +122,19 @@
 
     <!-- Java Script
     ================================================== -->
+    <script>
+        fetch("isLogged.php")
+            .then(res => res.text()) // parse response as JSON (can be res.text() for plain response)
+            .then(response => {
+                if(response == "logged"){
+                    window.location = "cabinet.php";
+                }
+            })
+            .catch(err => {
+                console.log("u")
+                alert("sorry, there are no results for your search")
+        });
+    </script>
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
