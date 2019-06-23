@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (isset($_SESSION["balance"])){
+    $balance = $_SESSION["balance"];
+} else {
+    $balance = 0;
+}
+?>
+
 <!DOCTYPE html>
 <!--[if lt IE 9 ]><html class="no-js oldie" lang="en"> <![endif]-->
 <!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
@@ -23,6 +32,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/vendor.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
     <style type="text/css" media="screen">
         .s-styles { 
@@ -49,6 +59,18 @@
           text-align: center;
           margin-top: 25px;
         }
+
+        .balance{
+            float: right;
+            margin: -20px 30px;
+        }
+        .pay{
+            padding: 0;
+            padding: 5px 10px;
+            border: 1px solid #39b54a;
+            color: #39b54a;
+            cursor: pointer;
+        }
      </style> 
 
     <!-- script
@@ -64,6 +86,7 @@
 </head>
 
 <body id="top">
+        
 
     <!-- header
     ================================================== -->
@@ -73,6 +96,14 @@
             <a class="site-logo" href="index.html">
                 <img src="images/logo.png" alt="Homepage">
             </a>
+        </div>
+        <div class="balance">
+            <h4>
+                Баланс: <span id="balance"><?=$balance?></span> тенге
+                <span class="pay">
+                    <a href="#ex1" rel="modal:open">+</a>
+                </span>
+            </h4>
         </div>
 
     </header> <!-- end s-header -->
@@ -133,6 +164,13 @@
 
     </footer> <!-- end footer -->
 
+    <!-- Modal HTML embedded directly into document -->
+    <div id="ex1" class="modal">
+    <h3>Пополнить баланс</h3>
+    <label for="sampleInput">Сумма:</label>
+    <input class="full-width" type="email" placeholder="Сумма в тенге" id="newBalance">
+    <input id="submitform" class="btn--primary" type="submit" value="Отправить">
+    </div>
 
 
     <!-- preloader
@@ -155,6 +193,45 @@
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <script>
+
+        let form = document.querySelector("#submitform");
+
+        form.addEventListener("click", addBalance);
+
+        function addBalance(e){
+            let balance = parseInt(document.querySelector("#balance").innerHTML);
+            let newBalance = parseInt(document.querySelector("#newBalance").value);
+
+            e.preventDefault();
+            const options = {
+                method: 'POST',
+                mode: "same-origin",
+                credentials: "same-origin",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "payload": balance + newBalance
+                })
+            };
+
+            fetch('updateBalance.php', options)
+                .then((response) => {
+                    return response.text();
+                })
+                .then((res) => {
+                    document.querySelector("#balance").innerHTML = balance + newBalance;
+                    document.querySelector(".close-modal").click();
+                })
+                .catch((error) => {
+                    console.log(error);
+            });
+
+        }
+
+    </script>
 
 </body>
 
