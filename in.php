@@ -16,6 +16,7 @@
       $_SESSION["name"] = $row["name"];
       $_SESSION["email"] = $row["email"];
       $_SESSION["tel"] = $row["tel"];
+      $_SESSION["balance"] = $row["balance"];
       header("Location: cabinet.php");
     }
   }else {
