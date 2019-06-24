@@ -246,6 +246,24 @@ $balance = $arr["balance"];
 
         }, 2000);
 
+        //Update balance
+        setInterval(function() {
+            
+            fetch('getNewBalance.php')
+                .then((response) => {
+                    return response.text();
+                })
+                .then((res) => {
+                    balance = res.replace('"', '');
+                    balance = balance.replace('"', '');
+                    document.querySelector("#balance").innerHTML = balance;
+                })
+                .catch((error) => {
+                    console.log(error);
+            });
+
+        }, 2000);
+
     </script>
 
 </body>
