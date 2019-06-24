@@ -72,6 +72,12 @@ $balance = $arr["balance"];
             color: #39b54a;
             cursor: pointer;
         }
+
+        @media screen and (max-width: 480px){
+            .header-logo{
+                display: none;
+            }
+        }
      </style> 
 
     <!-- script
