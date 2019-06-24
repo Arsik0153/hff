@@ -6,6 +6,12 @@ $str = "SELECT balance FROM users WHERE email = '". $_SESSION["email"]."'";
 $result = $link->query($str) or die(mysqli_error());
 $arr = mysqli_fetch_array($result);
 $balance = $arr["balance"];
+
+$str = "SELECT cart FROM users WHERE id = 2";
+$result = $link->query($str) or die(mysqli_error());
+$arr = mysqli_fetch_array($result);
+$cart = $arr["cart"];
+$cart = unserialize($cart);
 ?>
 
 <!DOCTYPE html>
@@ -128,20 +134,18 @@ $balance = $arr["balance"];
 
         <div class="basket-wrap">
 
-          <div class="basket-block">
-            <h3>Говяжий доширак</h3>
-            <p>500 тенге</p>
-          </div>
+        <?php
 
-          <div class="basket-block">
-              <h3>Биг Бон куриный</h3>
-              <p>350 тенге</p>
-            </div>
+            foreach ($cart as $item) {
+                echo '
+                <div class="basket-block">
+                    <h3>'.$item["name"].'</h3>
+                    <p>'.$item["price"].' тенге</p>
+                </div>
+                ';
+            }
 
-            <div class="basket-block">
-                <h3>Ролтон с перцем</h3>
-                <p>220 тенге</p>
-              </div>
+        ?>
 
         </div> <!-- end row -->
 
