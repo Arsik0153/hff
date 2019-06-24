@@ -6,12 +6,6 @@ $str = "SELECT balance FROM users WHERE email = '". $_SESSION["email"]."'";
 $result = $link->query($str) or die(mysqli_error());
 $arr = mysqli_fetch_array($result);
 $balance = $arr["balance"];
-
-$str = "SELECT cart FROM users WHERE id = 2";
-$result = $link->query($str) or die(mysqli_error());
-$arr = mysqli_fetch_array($result);
-$cart = $arr["cart"];
-$cart = unserialize($cart);
 ?>
 
 <!DOCTYPE html>
@@ -134,20 +128,9 @@ $cart = unserialize($cart);
 
         <div class="basket-wrap">
 
-        <?php
+            <p style="text-align: center">Загрузка...</p>
 
-            foreach ($cart as $item) {
-                echo '
-                <div class="basket-block">
-                    <h3>'.$item["name"].'</h3>
-                    <p>'.$item["price"].' тенге</p>
-                </div>
-                ';
-            }
-
-        ?>
-
-        </div> <!-- end row -->
+        </div> <!-- end basket-wrap -->
 
         
 
@@ -235,6 +218,33 @@ $cart = unserialize($cart);
             });
 
         }
+
+        //Get cart items
+        setInterval(function() {
+            
+            fetch('getNewItems.php')
+                .then((response) => {
+                    return response.json();
+                })
+                .then((res) => {
+
+                    let container = document.querySelector(".basket-wrap");
+
+                    container.innerHTML = "";
+
+                    res.forEach(function(data, index) {
+                        var newDiv = document.createElement('div');
+                        newDiv.className = "basket-block";
+                        newDiv.innerHTML = '<h3>' + data.name + '</h3> <p>' + data.price + ' тенге</p>';
+
+                        var child = container.appendChild(newDiv);
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+            });
+
+        }, 2000);
 
     </script>
 
