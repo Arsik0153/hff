@@ -1,10 +1,11 @@
 <?php
 session_start();
-if (isset($_SESSION["balance"])){
-    $balance = $_SESSION["balance"];
-} else {
-    $balance = 0;
-}
+include("connect.php");
+
+$str = "SELECT balance FROM users WHERE email = '". $_SESSION["email"]."'";
+$result = $link->query($str) or die(mysqli_error());
+$arr = mysqli_fetch_array($result);
+$balance = $arr["balance"];
 ?>
 
 <!DOCTYPE html>
